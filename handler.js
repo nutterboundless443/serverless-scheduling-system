@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
+const logError = (action, error) => console.error(`Error ${action}:`, error);
+
 module.exports.createTask = async (event) => {
   const data = JSON.parse(event.body);
   const params = {
@@ -17,7 +19,7 @@ module.exports.createTask = async (event) => {
     await dynamoDb.put(params).promise();
     return { statusCode: 200, body: JSON.stringify(params.Item) };
   } catch (error) {
-    console.error('Error creating task:', error);  
+    logError('creating task', error);
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not create task' }) };
   }
 };
@@ -34,6 +36,7 @@ module.exports.getTasks = async () => {
       body: JSON.stringify(data.Items)
     };
   } catch (error) {
+    logError('retrieving tasks', error);
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not retrieve tasks' }) };
   }
 };
@@ -55,6 +58,7 @@ module.exports.updateTask = async (event) => {
     await dynamoDb.update(params).promise();
     return { statusCode: 200, body: JSON.stringify({ message: 'Task updated successfully' }) };
   } catch (error) {
+    logError('updating task', error);
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not update task' }) };
   }
 };
@@ -69,6 +73,7 @@ module.exports.deleteTask = async (event) => {
     await dynamoDb.delete(params).promise();
     return { statusCode: 200, body: JSON.stringify({ message: 'Task deleted successfully' }) };
   } catch (error) {
+    logError('deleting task', error);
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not delete task' }) };
   }
 };
