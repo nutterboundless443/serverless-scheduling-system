@@ -1,0 +1,47 @@
+service: serverless-scheduling-system
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  createTask:
+    handler: handler.createTask
+    events:
+      - http:
+          path: tasks
+          method: post
+  getTasks:
+    handler: handler.getTasks
+    events:
+      - http:
+          path: tasks
+          method: get
+  updateTask:
+    handler: handler.updateTask
+    events:
+      - http:
+          path: tasks/{id}
+          method: put
+  deleteTask:
+    handler: handler.deleteTask
+    events:
+      - http:
+          path: tasks/{id}
+          method: delete
+
+resources:
+  Resources:
+    TasksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Tasks
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
