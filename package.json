@@ -1,0 +1,12 @@
+{
+  "name": "serverless-scheduling-system",
+  "version": "1.0.0",
+  "description": "无服务器调度系统",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1000.0"
+  }
+}
