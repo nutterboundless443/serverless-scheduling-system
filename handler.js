@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const logError = (action, error) => console.error(`Error ${action}:`, error);
+const logError = (action, error) => console.error(`[${new Date().toISOString()}] Error ${action}:`, error);
 
 module.exports.createTask = async (event) => {
   const data = JSON.parse(event.body);
