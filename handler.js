@@ -4,7 +4,12 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const logError = (action, error) => console.error(`[${new Date().toISOString()}] Error ${action}:`, error);
 
 module.exports.createTask = async (event) => {
-  const data = JSON.parse(event.body);
+  let data;
+  try {
+    data = JSON.parse(event.body);
+  } catch (error) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid input' }) };
+  }
   const params = {
     TableName: 'Tasks',
     Item: {
@@ -42,7 +47,12 @@ module.exports.getTasks = async () => {
 };
 
 module.exports.updateTask = async (event) => {
-  const data = JSON.parse(event.body);
+  let data;
+  try {
+    data = JSON.parse(event.body);
+  } catch (error) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid input' }) };
+  }
   const params = {
     TableName: 'Tasks',
     Key: { id: event.pathParameters.id },
