@@ -11,12 +11,13 @@ module.exports.createTask = async (event) => {
       assignedTo: data.assignedTo,
       status: data.status
     }
-  };
+  };  
 
   try {
     await dynamoDb.put(params).promise();
     return { statusCode: 200, body: JSON.stringify(params.Item) };
   } catch (error) {
+    console.error('Error creating task:', error);  
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not create task' }) };
   }
 };
@@ -24,7 +25,7 @@ module.exports.createTask = async (event) => {
 module.exports.getTasks = async () => {
   const params = {
     TableName: 'Tasks'
-  };
+  };  
 
   try {
     const data = await dynamoDb.scan(params).promise();
@@ -48,7 +49,7 @@ module.exports.updateTask = async (event) => {
       ':assignedTo': data.assignedTo,
       ':status': data.status
     }
-  };
+  };  
 
   try {
     await dynamoDb.update(params).promise();
@@ -62,7 +63,7 @@ module.exports.deleteTask = async (event) => {
   const params = {
     TableName: 'Tasks',
     Key: { id: event.pathParameters.id }
-  };
+  };  
 
   try {
     await dynamoDb.delete(params).promise();
